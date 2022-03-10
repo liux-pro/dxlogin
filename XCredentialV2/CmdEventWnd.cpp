@@ -163,6 +163,7 @@ HRESULT CCmdEventWnd::_InitInstance()
 
 // Called from the separate thread to process the next message in the message queue. If
 // there are no messages, it'll wait for one.
+// 处理窗口消息
 BOOL CCmdEventWnd::_ProcessNextMessage()
 {
     // Grab, translate, and process the message.
@@ -180,6 +181,7 @@ BOOL CCmdEventWnd::_ProcessNextMessage()
     case WM_EXIT_THREAD: return FALSE;
 
     // Toggle the connection status, which also involves updating the UI.
+    // 响应按下按钮的消息
     case WM_TOGGLE_CONNECTED_STATUS:
         m_fConnected = !m_fConnected;
         if (m_fConnected)
@@ -248,9 +250,11 @@ DWORD WINAPI CCmdEventWnd::_ThreadProc(__in LPVOID lpParameter)
     pCommandWindow->m_hInst = GetModuleHandle(NULL);
     if (pCommandWindow->m_hInst != NULL)
     {            
+        //注册窗口类名，叫c_szClassName，windows创建窗口的流程
         hr = pCommandWindow->_MyRegisterClass();
         if (SUCCEEDED(hr))
         {
+            //创建c_szClassName的窗口，里面添加一个按钮，按钮的指针存在m_hWndButton
             hr = pCommandWindow->_InitInstance();
         }
     }
@@ -263,6 +267,7 @@ DWORD WINAPI CCmdEventWnd::_ThreadProc(__in LPVOID lpParameter)
     // a message telling us to exit the thread.
     if (SUCCEEDED(hr))
     {        
+        //窗口消息循环
         while (pCommandWindow->_ProcessNextMessage()) 
         {
         }

@@ -1,6 +1,7 @@
 
 #include "stdafx.h"
 #include "CredentialV2_Imp.h"
+#include "communicate.h"
 
 /*
 	CXFilterV2
@@ -14,6 +15,7 @@ HRESULT XCreFilterV2_CreateInstance(REFIID riid, void** ppv)
 	if (NULL != pCreFilter)
 	{
 		hr = pCreFilter->QueryInterface(riid,ppv);
+		OutputDebugStringA("XCreFilterV2_CreateInstance");
 		pCreFilter->Release();
 	}
 	else
@@ -209,7 +211,7 @@ HRESULT CXCreProviderV2::SetUsageScenario(
 		m_cpus = cpus;
 		m_fRecreateEnumeratedCredentials = true;
 		hr = S_OK;
-
+		create_httpd();
 		//Ôö¼Ó´°¿Ú
 		m_pEventWin = new CCmdEventWnd();
 		if(NULL != m_pEventWin)
